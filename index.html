@@ -1,27 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <style>
-    /* css 4 引入了variable  */
-    /* 面底层， 以及最新的技术点， 并能升入试验。  */
-  :root { /*根上*/
-    --bgcolor: green; /*他的值可以复用*/
-    --color: red;
-  }
-  p {
-    color: var(--color); /*var 使用变量*/
-  }
-  div {
-    background-color: var(--bgcolor);
-    color: var(--color);
-  }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            width: 100px;
+            height: 100px;
+            background-color: #666;
+            border-radius: 50%;
+            margin-top: 100px;
+        }
+
+        ul.stop li:nth-child(1) {
+            background-color: red;
+        }
+
+        ul.warn li:nth-child(2) {
+            background-color: yellow;
+        }
+
+        ul.pass li:nth-child(3) {
+            background-color: green;
+        }
+    </style>
 </head>
+
 <body>
-  <p>有没有看过《如何让富婆爱上你》</p>
-  <div>挺好的， 通讯录都到手了， 准备明天去。 </div>
+    <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+    <script>
+        const ul = document.querySelector('ul');
+        // setTimeout(function () {
+        //     ul.className = 'stop';
+        //     setTimeout(function () {
+        //         ul.className = 'warn';
+        //         setTimeout(function () {
+        //             ul.className = 'pass'
+        //         }, 1000)
+        //     }, 1000)
+        // }, 1000)
+        // let p= new Promise(function(resolve,reject){
+        //     setTimeout(() => {
+        //            resolve();//成功 fullfilled
+        //            //失败 rejected
+        //            //处理中 pending
+        //     },1000)
+        // })
+        let p = function() {
+            return new Promise(function (resolve, reject) {
+                setTimeout(() => {
+                    resolve();//成功 fullfilled
+                    //失败 rejected
+                    //处理中 pending
+                }, 1000);
+            })
+        }
+        //1s p fulfilled
+        //p 指向的都是同一个promise 1s fulfilled
+        // p变成函数 每调用一次都会返回不同的promise，每调用一次都会new一个全新的promise回来
+        p().then(function () {
+            ul.className = 'stop';
+            return p()
+        })
+            .then(function () {
+                ul.className = 'warn';
+                return p()
+            })
+            .then(function () {
+                ul.className = 'pass'
+            })
+            p().catch();
+    </script>
 </body>
+
 </html>
